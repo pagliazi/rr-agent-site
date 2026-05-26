@@ -1,0 +1,71 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RR-Agent / ReachRich vs Qlib / Backtrader / akshare / Wind:量化平台对比</title>
+<meta name="description" content="自研 A 股量化数据与研究平台 RR-Agent + ReachRich,与 Qlib(Microsoft)、Backtrader/Zipline、akshare/tushare、Wind/同花顺等同类工具的诚实对比。CPCV/DSR 防过拟合、数据契约、行业中性、MCP 接入维度逐项比较。">
+<meta name="keywords" content="量化平台对比,Qlib vs,Backtrader vs,akshare 与 tushare,Wind 同花顺,A股量化数据,量化研究平台,ReachRich 对比,RR-Agent 对比,CPCV DSR 回测">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/compare/">
+<meta property="og:type" content="article"><meta property="og:title" content="量化平台诚实对比:RR-Agent / ReachRich vs Qlib / Backtrader / akshare / Wind">
+<meta property="og:description" content="自研量化平台与同类对比,逐项维度评估,定位互补而非替代。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/compare/">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "RR-Agent / ReachRich vs Qlib / Backtrader / akshare / Wind:量化数据与研究平台对比", "description": "自研 A 股量化数据与研究平台 RR-Agent + ReachRich,与 Qlib(Microsoft)、Backtrader/Zipline、akshare/tushare、Wind/同花顺等同类工具的诚实对比。", "datePublished": "2026-05-29", "author": {"@type": "Organization", "name": "ReachRich"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "RR-Agent", "item": "https://agent.show.reachrich.ai/"}, {"@type": "ListItem", "position": 2, "name": "对比"}]}</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:880px;margin:0 auto;padding:28px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:18px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:28px;margin:0 0 12px}
+ h2{font-size:21px;margin:34px 0 14px;padding-top:8px;border-top:1px solid var(--line)}
+ h3{font-size:18px;margin:22px 0 10px}
+ .lead{color:#cdd6e0;margin:8px 0}
+ .comp{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0}
+ table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14px}
+ th,td{padding:9px 11px;border:1px solid var(--line);text-align:left;vertical-align:top} th{background:var(--panel)}
+ a{color:var(--acc2)} blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ footer{border-top:1px solid var(--line);margin-top:36px;padding-top:14px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › 同类对比</div>
+<h1>⚖️ RR-Agent / ReachRich vs 同类:诚实对比</h1>
+<p class="lead">很多人问 RR-Agent / ReachRich 与 Qlib、Backtrader、akshare/tushare、Wind/同花顺等是什么关系。本文做诚实对比 — <strong>大多数情况下我们是<em>互补</em>而不是<em>替代</em></strong>。</p>
+<blockquote>声明:本文为技术与定位科普,不构成对任何项目或厂商的贬低或推荐;数据为公开信息整理。如有过时请告知更正。</blockquote>
+<h2>📊 维度速览</h2>
+<table><thead><tr><th>维度 / Dimension</th><th>RR-Agent + ReachRich(自研)</th><th>Qlib</th><th>Backtrader/Zipline</th><th>akshare/tushare</th><th>Wind/同花顺</th></tr></thead><tbody><tr><td>类型</td><td>**全链量化研究 + 数据平台**</td><td>ML 量化框架</td><td>回测库</td><td>数据聚合库</td><td>商业数据终端</td></tr><tr><td>A 股数据深度</td><td>✅ 自研多源校验 + 复权对齐</td><td>基础版</td><td>需自接</td><td>✅ 广度好,**口径不一**</td><td>✅✅ 行业最广</td></tr><tr><td>数据契约统一</td><td>✅ 字段/单位/复权统一</td><td>—</td><td>—</td><td>❌ 多源口径漂移</td><td>部分(终端格式)</td></tr><tr><td>实时与历史同源</td><td>✅</td><td>—</td><td>—</td><td>部分</td><td>✅(订阅版)</td></tr><tr><td>CPCV 交叉验证</td><td>✅ 内置</td><td>walk-forward 为主</td><td>需自实现</td><td>—</td><td>—</td></tr><tr><td>DSR 多重检验校正</td><td>✅ 内置</td><td>—</td><td>—</td><td>—</td><td>—</td></tr><tr><td>交易成本 gate</td><td>✅ 强制</td><td>需自加</td><td>需自加</td><td>—</td><td>—</td></tr><tr><td>组合优化(行业中性)</td><td>✅</td><td>部分</td><td>需自实现</td><td>—</td><td>部分</td></tr><tr><td>算法订单 + 实时风控</td><td>✅</td><td>—</td><td>部分</td><td>—</td><td>机构版有</td></tr><tr><td>MCP / LLM 直接调用</td><td>✅</td><td>—</td><td>—</td><td>—</td><td>—</td></tr><tr><td>成本</td><td>研究友好(自研开放接入)</td><td>开源免费</td><td>开源免费</td><td>免费/freemium</td><td>**年费高昂**</td></tr></tbody></table>
+<h2>🔍 逐项对比</h2>
+<div class="comp">
+<h3>Qlib <span style="font-weight:400;color:#8b949e;font-size:14px">· 开源 ML-量化框架(Microsoft)</span></h3>
+<p class="lead"><b>聚焦:</b> 深度学习量化研究、因子表达式 DSL、模型训练流水线</p>
+<p class="lead"><b>它们做得好的:</b><br>• 开源活跃 (20k+ stars)<br>• 内置多个 SOTA ML 模型(GBDT/LSTM/Transformer)<br>• 研究流程标准化(数据→因子→训练→回测)</p>
+<p class="lead"><b>与 RR-Agent / ReachRich 的差异(诚实定位):</b><br>**互补关系,不是替代**。Qlib 是 ML 量化研究框架,RR-Agent 提供的是上层研究工作台 + 干净的数据底座(ReachRich)。Qlib 自带的 A 股数据是基础版,**ReachRich 在数据层做多源校验、复权一致、新鲜度监控**——Qlib 用户可以把数据源切到 ReachRich 提升数据可靠性,把模型部分继续用 Qlib。CPCV/DSR 防过拟合纪律我们做得更严格(Qlib 默认走 walk-forward)。</p>
+<p style="color:#8b949e;font-size:12.5px">→ <a href="https://github.com/microsoft/qlib">https://github.com/microsoft/qlib</a></p>
+</div><div class="comp">
+<h3>Backtrader / Zipline / vectorbt <span style="font-weight:400;color:#8b949e;font-size:14px">· Python 回测库</span></h3>
+<p class="lead"><b>聚焦:</b> 事件驱动回测、策略表达、绩效统计</p>
+<p class="lead"><b>它们做得好的:</b><br>• 成熟稳定,大量策略代码可参考<br>• 灵活的事件循环、订单管理<br>• 社区生态丰富</p>
+<p class="lead"><b>与 RR-Agent / ReachRich 的差异(诚实定位):</b><br>**回测层工具,非全链平台**。这些库专注"回测"环节,需要你自己解决数据、因子、组合、执行、监控。RR-Agent 是**全链工作台**(数据→因子→ML→组合→回测→执行),且**内置 CPCV + DSR + 成本 gate 三件套防过拟合**,默认就是反过拟合纪律;Backtrader 等需要你自己加这些防护。</p>
+<p style="color:#8b949e;font-size:12.5px">→ <a href="https://www.backtrader.com/">https://www.backtrader.com/</a></p>
+</div><div class="comp">
+<h3>akshare / tushare <span style="font-weight:400;color:#8b949e;font-size:14px">· A 股数据 Python 库</span></h3>
+<p class="lead"><b>聚焦:</b> 聚合多个公开/收费源,Python 一行调用</p>
+<p class="lead"><b>它们做得好的:</b><br>• 免费/开源,门槛极低<br>• 覆盖广(行情、基本面、资讯、龙虎榜)<br>• 社区活跃</p>
+<p class="lead"><b>与 RR-Agent / ReachRich 的差异(诚实定位):</b><br>**数据层"原始聚合器" vs 自研"统一服务"**。akshare/tushare 把多个上游 API 包成 Python 函数返回,但**字段口径不统一、复权方式各异、无新鲜度监控、单源故障下游就崩**。ReachRich 在它们之上做**统一数据契约 + 多源交叉校验 + 复权对齐 + 新鲜度监控**——研究员不再每次取数都担心口径;并提供 **MCP** 让 LLM 直接调用,这是 akshare/tushare 没有的。</p>
+<p style="color:#8b949e;font-size:12.5px">→ <a href="https://github.com/akfamily/akshare">https://github.com/akfamily/akshare</a></p>
+</div><div class="comp">
+<h3>Wind / 同花顺 / 朝阳永续 <span style="font-weight:400;color:#8b949e;font-size:14px">· 商业机构数据终端</span></h3>
+<p class="lead"><b>聚焦:</b> 机构级数据广度 + 深度,行业标准</p>
+<p class="lead"><b>它们做得好的:</b><br>• 数据广度行业第一<br>• 研报、基本面、宏观、商品全覆盖<br>• 机构用户认可度高</p>
+<p class="lead"><b>与 RR-Agent / ReachRich 的差异(诚实定位):</b><br>**机构级 vs 研究员友好**。商业终端订阅成本高(年费数万至数十万),数据导出受限,API 接入门槛高。ReachRich 定位**研究员友好的开放数据底座**——核心 A 股量化数据 + 多源校验 + 复权 + 开放 API/MCP,**研究流程透明、口径可披露、成本可控**。两类用户:重度机构需要 Wind 的广度;量化研究员需要 ReachRich 的契约一致性。</p>
+<p style="color:#8b949e;font-size:12.5px">→ <a href="https://www.wind.com.cn/">https://www.wind.com.cn/</a></p>
+</div>
+<h2>🎯 我们的定位 — 一句话</h2>
+<blockquote><strong>自研 A 股量化数据底座(ReachRich)+ 自研量化研究工作台(RR-Agent),内嵌严格的防过拟合纪律(CPCV/DSR/成本 gate)与统一数据契约;互补常见开源框架与商业终端,不替代。</strong></blockquote>
+<h2>📚 相关阅读</h2>
+<ul>
+<li><a href="/insights/factor-mining-methodology.html">因子挖掘方法论</a></li>
+<li><a href="/insights/backtesting-overfitting-cpcv-dsr.html">回测防过拟合 CPCV + DSR</a></li>
+<li><a href="/insights/api-vs-mcp-quant-data.html">API vs MCP 接入对比</a></li>
+<li><a href="/glossary/">A 股量化术语词典</a></li>
+</ul>
+<footer>本文最后更新 2026-05-29 · 不构成投资或采购建议。© 2026 ReachRich · <a href="https://reachrich.ai">reachrich.ai</a></footer>
+</div></body></html>

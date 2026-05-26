@@ -1,0 +1,86 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>因子相关性:共线性诊断与因子去重 · RR-Agent</title>
+<meta name="description" content="多因子模型中的共线性问题:相关系数矩阵、聚类去重、正交化与「看起来很多其实就一个」的陷阱。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/factor-collinearity-deduplication.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="因子相关性:共线性诊断与因子去重"><meta property="og:description" content="多因子模型中的共线性问题:相关系数矩阵、聚类去重、正交化与「看起来很多其实就一个」的陷阱。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/factor-collinearity-deduplication.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"因子相关性:共线性诊断与因子去重","description":"多因子模型中的共线性问题:相关系数矩阵、聚类去重、正交化与「看起来很多其实就一个」的陷阱。","inLanguage":"zh-CN","datePublished":"2026-05-28","dateModified":"2026-05-28","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/factor-collinearity-deduplication.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"洞察 Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"因子相关性:共线性诊断与因子去重"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ ul,ol{padding-left:22px} li{margin:5px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style><script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "如何诊断与去重共线因子", "description": "多因子模型中识别高度相关的「近亲」因子并做去重,稳定模型权重 + 防回测虚高。", "step": [{"@type": "HowToStep", "name": "1. 相关系数矩阵", "text": "计算所有因子两两 Spearman 相关。|ρ|>0.7 标为高度相关。"}, {"@type": "HowToStep", "name": "2. 层次聚类", "text": "按相关性做聚类,把高度相关的归簇。"}, {"@type": "HowToStep", "name": "3. 选代表", "text": "每簇保留 IC 最高(或综合最优)的一个,其余删除或正交化。"}, {"@type": "HowToStep", "name": "4. VIF 校验", "text": "剩余因子 VIF 全部 < 10,共线性问题消除。"}]}
+</script>
+</head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">洞察</a> › 因子相关性:共线性诊断与因子去重</div>
+<h1 id="_1">因子相关性:共线性诊断与因子去重</h1>
+<blockquote>
+<p>你以为有 50 个因子,做相关性矩阵一看——其实只有 3-5 个真实独立维度,剩下的都是近亲。<strong>共线性会让模型权重不稳定、回测虚高、组合归因失真</strong>。本文讲因子去重的诊断与处理(方法论)。</p>
+</blockquote>
+<h2 id="_2">为什么会有共线性</h2>
+<p>A股因子大多源自有限的几个底层信号:价格、成交量、资金流、基本面。<strong>不同时间窗、不同变换(对数/标准化/排序)做出来的"新因子"往往高度相关</strong>——比如 5 日动量、10 日动量、20 日动量,绝对相关性都 0.6+;隐含波动率与历史波动率近乎线性。</p>
+<p>如果不去重,看似 50 因子的模型,有效独立维度可能就 5 个,但每个被"复制"了 10 次——模型对那 5 个真实信号过度倚重,且权重在不同 fold 上跳来跳去,极不稳定。</p>
+<h2 id="_3">诊断三件套</h2>
+<h3 id="1">1. 相关系数矩阵</h3>
+<p>计算所有因子两两的 Spearman 相关。<strong>|ρ| &gt; 0.7</strong> 一般视作高度相关。<strong>ρ &gt; 0.9</strong> 几乎是同一个因子。</p>
+<h3 id="2">2. 层次聚类</h3>
+<p>按相关性做聚类,把高度相关的因子分簇。每个簇只保留一个代表(典型选 IC 最高的)。</p>
+<h3 id="3-vif-variance-inflation-factor">3. VIF (Variance Inflation Factor)</h3>
+<p>回归 X_i 对其他所有 X 的 R²,VIF = 1/(1-R²)。<strong>VIF &gt; 10</strong> 视作严重共线。</p>
+<h2 id="_4">处理方法</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>聚类后保留代表</strong></td>
+<td>简单粗暴,可解释性好</td>
+</tr>
+<tr>
+<td><strong>正交化(PCA / Gram-Schmidt)</strong></td>
+<td>用主成分代替原因子,信息损失小但失去经济含义</td>
+</tr>
+<tr>
+<td><strong>正则化(Ridge / Lasso)</strong></td>
+<td>在模型层面抑制共线性影响,简单有效</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_5">残差因子的价值</h2>
+<p>把因子 B 对因子 A 做回归,<strong>残差</strong>就是 B 在 A 之外的"增量信息"——如果残差与目标变量仍显著相关,说明 B 有 A 之外的真实信息;否则就是冗余。</p>
+<p>这是判断"我加这个新因子有没有意义"的标尺。详见 <a href="factor-mining-methodology.html">因子挖掘方法论</a>。</p>
+
+<h2>📖 相关阅读 / Related</h2>
+<ul>
+<li><a href="factor-mining-methodology.html">因子挖掘方法论</a></li>
+<li><a href="backtesting-overfitting-cpcv-dsr.html">防过拟合 CPCV/DSR</a></li>
+<li><a href="https://agent.show.reachrich.ai/glossary/#ic">术语:IC / IR / 共线性 / 正交化</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← 更多洞察</a> · <a href="/">首页</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本文仅为量化数据研究与方法论科普,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。Educational content on quantitative methodology — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

@@ -1,0 +1,80 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>复权与除权除息 · XDXR Adjustment for China A-shares · RR-Agent</title>
+<meta name="description" content="复权(前/后复权)与除权除息 XDXR 在 A 股量化中的完整处理:为什么需要、口径如何统一、隔夜假止损如何避免、回测一致性。">
+<meta name="keywords" content="复权,前复权,后复权,除权除息,XDXR,A股复权,送股,转增,派息,quant adjustment">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/topics/xdxr/">
+<meta property="og:type" content="article"><meta property="og:title" content="复权与除权除息 · XDXR Adjustment for China A-shares">
+<meta property="og:description" content="复权(前/后复权)与除权除息 XDXR 在 A 股量化中的完整处理:为什么需要、口径如何统一、隔夜假止损如何避免、回测一致性。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/topics/xdxr/">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","headline":"复权与除权除息 · XDXR Adjustment for China A-shares","description":"复权(前/后复权)与除权除息 XDXR 在 A 股量化中的完整处理:为什么需要、口径如何统一、隔夜假止损如何避免、回测一致性。","inLanguage":"zh-CN","datePublished":"2026-05-29","author":{"@type":"Organization","name":"ReachRich"},"mainEntityOfPage":"https://agent.show.reachrich.ai/topics/xdxr/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Topics","item":"https://agent.show.reachrich.ai/topics/"},{"@type":"ListItem","position":3,"name":"复权与除权除息 · XDXR Adjustment for China A-shares"}]}
+</script>
+<style>:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:28px;margin:0 0 18px} h2{font-size:21px;margin:30px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:17px;margin:22px 0 8px}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px} th,td{padding:9px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ul,ol{padding-left:22px} li{margin:5px 0}
+footer{border-top:1px solid var(--line);margin-top:32px;padding-top:14px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/topics/">Topics</a> › 复权与除权除息 · XDXR Adjustment for China A-shares</div>
+<h1 id="xdxr-adjustment">🔁 复权与除权除息 · XDXR Adjustment</h1>
+<blockquote>
+<p>A 股量化里最容易出错也最致命的一环。本主题页汇总复权处理的完整方法论与避坑指南。</p>
+</blockquote>
+<h2 id="_1">为什么必须复权</h2>
+<p>A 股每年大量公司做<strong>除权除息(XDXR)</strong>:送股、转增、派息。<strong>raw 价格会出现非交易性"跳空"</strong>——比如 10 送 4,raw close "跌"~30% 但这不是真实下跌。如果用 raw 价:
+- 回测算成巨亏;
+- 隔夜持仓的止损被假跳空错误触发;
+- 因子(动量/反转)被污染。</p>
+<h2 id="vs-vs">前复权 vs 后复权 vs 复权因子</h2>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>做法</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前复权</td>
+<td>以当前价为基准向前调整历史价</td>
+<td>看图、近期分析</td>
+</tr>
+<tr>
+<td>后复权</td>
+<td>以上市首日向后累乘</td>
+<td>长周期回测、收益计算</td>
+</tr>
+<tr>
+<td>除权除息因子</td>
+<td>保留原始价 + 每日复权因子</td>
+<td>灵活按需还原</td>
+</tr>
+</tbody>
+</table>
+<p>关键不是"用哪种",而是<strong>全链口径一致</strong>:实时、历史、回测、持仓成本必须用同一套复权逻辑。</p>
+<h2 id="_2">数据层统一是底座的职责</h2>
+<p>复权应在<strong>数据契约层</strong>统一处理,而非各个策略各算各的。否则 N 个策略各实现一套复权,口径必然不一致。</p>
+<h2 id="_3">完整阅读</h2>
+<ul>
+<li>🔄 <a href="/insights/a-share-price-adjustment.html">A股复权处理(中文完整版)</a></li>
+<li>🌐 <a href="/insights/a-share-price-adjustment-en.html">A-Share Price Adjustment for XDXR (English)</a></li>
+<li>🛡️ <a href="/insights/multi-source-data-validation.html">多源数据校验</a> — 复权差异是多源校验的重点维度之一</li>
+<li>📚 <a href="/glossary/#xdxr">术语:XDXR / 前复权 / 后复权 / 复权因子</a></li>
+<li>⚖️ <a href="/compare/">vs Qlib / akshare 等的复权处理</a></li>
+</ul>
+<h2 id="a">在 A 股量化中的实际意义</h2>
+<p>复权是数据底座的底线工程。<strong>做不对</strong>:回测虚假/止损错杀/因子污染——错过这关,后面所有量化研究的可靠性都打折。<strong>做对</strong>:实时与历史无缝、策略上线即兑现回测预期、隔夜风控不被假跳空触发。</p>
+<footer>本主题页持续更新。© 2026 ReachRich · <a href="https://reachrich.ai">reachrich.ai</a></footer>
+</div></body></html>

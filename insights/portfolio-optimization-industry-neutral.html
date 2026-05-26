@@ -1,0 +1,91 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>组合优化:行业中性与风险归因 · RR-Agent</title>
+<meta name="description" content="量化组合优化中的行业中性约束、Barra 风格因子风险归因、权重分配纪律与回撤控制方法论。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="组合优化:行业中性与风险归因"><meta property="og:description" content="量化组合优化中的行业中性约束、Barra 风格因子风险归因、权重分配纪律与回撤控制方法论。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"组合优化:行业中性与风险归因","description":"量化组合优化中的行业中性约束、Barra 风格因子风险归因、权重分配纪律与回撤控制方法论。","inLanguage":"zh-CN","datePublished":"2026-05-28","dateModified":"2026-05-28","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"洞察 Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"组合优化:行业中性与风险归因"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ ul,ol{padding-left:22px} li{margin:5px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style><script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "如何做行业中性组合优化", "description": "组合优化中加入行业中性约束,把因子 alpha 与行业 beta 分离,提升策略稳定性。", "step": [{"@type": "HowToStep", "name": "1. 取得基准行业权重", "text": "沪深 300 / 中证 500 等基准在各申万一级行业的权重分布。"}, {"@type": "HowToStep", "name": "2. 设定约束", "text": "组合在每个行业的暴露 vs 基准的差异 |Δw_industry| ≤ ε(典型 1-3%)。"}, {"@type": "HowToStep", "name": "3. 优化目标", "text": "最大化因子打分加权 + 二次方差约束 + 行业中性 + 单股票上限 + 换手率惩罚。"}, {"@type": "HowToStep", "name": "4. 风险归因校验", "text": "归因显示行业贡献接近 0,残差 alpha 显著为正——确认隔离生效。"}]}
+</script>
+</head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">洞察</a> › 组合优化:行业中性与风险归因</div>
+<h1 id="_1">组合优化:行业中性与风险归因</h1>
+<blockquote>
+<p>选出好因子只是开始;把因子打分变成实盘可执行的持仓,需要一层<strong>组合优化</strong>——这一层决定权重怎么分、风险怎么控、行业怎么暴露。本文讲组合优化的核心约束与归因思想(方法论,不涉及具体参数)。</p>
+</blockquote>
+<h2 id="_2">为什么要行业中性</h2>
+<p>如果你的因子在新能源上特别有效,而你不约束行业暴露,模型最终可能"重仓新能源"——表面上是因子在赚钱,实质是行业 beta 在驱动。一旦行业风格切换,整个组合一起回撤。</p>
+<p><strong>行业中性约束</strong>强制组合在各行业上的暴露贴近基准(如沪深 300 行业权重),把"行业 beta"剥离,留下的就是相对纯粹的因子 alpha。代价是收益上限被压低,但稳健性大幅提升——对持牌环境与机构资金更重要。</p>
+<h2 id="_3">风险归因:收益从哪里来</h2>
+<p>风险归因把组合的总收益/总波动<strong>分解到各风险源</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>行业(Industry)</td>
+<td>行业暴露贡献</td>
+</tr>
+<tr>
+<td>风格(Style)</td>
+<td>Size/Value/Momentum/Quality/Volatility 等风格因子</td>
+</tr>
+<tr>
+<td>国别 / 市场</td>
+<td>大盘 beta</td>
+</tr>
+<tr>
+<td>残差(Specific)</td>
+<td>上述之外的"纯 alpha"</td>
+</tr>
+</tbody>
+</table>
+<p>理想的因子策略:<strong>残差 alpha 显著为正,风格/行业贡献接近 0</strong>。如果归因发现 80% 收益来自行业 beta,那这个"alpha 因子"其实只是行业择时,不可持续。</p>
+<h2 id="_4">权重分配的纪律</h2>
+<ul>
+<li><strong>单股票上限</strong>:防过度集中(典型 1-3%);</li>
+<li><strong>换手率约束</strong>:防过度交易吃成本;</li>
+<li><strong>波动率目标</strong>:把整体波动控在某个区间;</li>
+<li><strong>回撤上限</strong>:触及阈值自动降仓。</li>
+</ul>
+<p>详见 <a href="../docs/methodology.html">研究方法论</a> 与 <a href="../docs/factors.html">因子库类型</a>。</p>
+
+<h2>📖 相关阅读 / Related</h2>
+<ul>
+<li><a href="realtime-risk-algo-execution.html">实时风控与算法订单</a></li>
+<li><a href="backtesting-overfitting-cpcv-dsr.html">防过拟合:CPCV + DSR</a></li>
+<li><a href="factor-mining-methodology.html">因子挖掘方法论</a></li>
+<li><a href="https://agent.show.reachrich.ai/glossary/#barra">术语:Barra / 行业中性 / 风险归因</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← 更多洞察</a> · <a href="/">首页</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本文仅为量化数据研究与方法论科普,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。Educational content on quantitative methodology — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

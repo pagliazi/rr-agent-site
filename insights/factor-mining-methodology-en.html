@@ -1,0 +1,100 @@
+<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline · RR-Agent</title>
+<meta name="description" content="A practitioner overview of quantitative factor mining for China A-shares: the seven major factor categories (momentum, reversal, microstructure, money-flow, fundamentals, ML-synthesized) and the OOS + DSR + cost-gate discipline that separates real alpha from noise.">
+<meta name="keywords" content="factor mining, China A-shares, alpha factors, quantitative research, CPCV, DSR, anti-overfitting, OOS validation, factor library">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/factor-mining-methodology-en.html">
+<link rel="alternate" hreflang="en" href="https://agent.show.reachrich.ai/insights/factor-mining-methodology-en.html">
+<link rel="alternate" hreflang="zh-CN" href="https://agent.show.reachrich.ai/insights/factor-mining-methodology.html">
+<meta property="og:type" content="article"><meta property="og:title" content="Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline">
+<meta property="og:description" content="A practitioner overview of quantitative factor mining for China A-shares: the seven major factor categories (momentum, reversal, microstructure, money-flow, fundamentals, ML-synthesized) and the OOS + DSR + cost-gate discipline that separates real alpha from noise.">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/factor-mining-methodology-en.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline","description":"A practitioner overview of quantitative factor mining for China A-shares: the seven major factor categories (momentum, reversal, microstructure, money-flow, fundamentals, ML-synthesized) and the OOS + DSR + cost-gate discipline that separates real alpha from noise.","inLanguage":"en","datePublished":"2026-05-29","dateModified":"2026-05-29","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/factor-mining-methodology-en.html","keywords":"factor mining, China A-shares, alpha factors, quantitative research, CPCV, DSR, anti-overfitting, OOS validation, factor library"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline"}]}
+</script>
+<style>
+:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ul,ol{padding-left:22px} li{margin:5px 0}
+.nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">Insights</a> › Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline</div>
+<h1 id="factor-mining-for-china-a-shares-seven-factor-types-anti-overfitting-discipline">Factor Mining for China A-Shares: Seven Factor Types &amp; Anti-Overfitting Discipline</h1>
+<blockquote>
+<p>Factor mining is where quant research starts — but distinguishing a <em>real</em> factor from a <em>backtest-pretty</em> one requires strict discipline. This post outlines the factor taxonomy for China A-shares and the validation pipeline we use (methodology only; we do not publish factor names, formulas, or parameters).</p>
+</blockquote>
+<h2 id="the-seven-factor-categories">The seven factor categories</h2>
+<p>A-share quant factors fall into seven broad families, capturing different micro- and fundamental signals:</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Signal source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Momentum</strong></td>
+<td>Persistence of price trends</td>
+</tr>
+<tr>
+<td><strong>Reversal</strong></td>
+<td>Short-term mean reversion</td>
+</tr>
+<tr>
+<td><strong>Volatility / Volume</strong></td>
+<td>Volatility regime + volume structure</td>
+</tr>
+<tr>
+<td><strong>Microstructure</strong></td>
+<td>Order book, tick-level, large-order classification</td>
+</tr>
+<tr>
+<td><strong>Money-flow</strong></td>
+<td>Main capital, Northbound flow, Dragon List</td>
+</tr>
+<tr>
+<td><strong>Fundamentals</strong></td>
+<td>F10, financial statements, valuation, dividends</td>
+</tr>
+<tr>
+<td><strong>ML-synthesized</strong></td>
+<td>Non-linear composition of multiple primitive factors</td>
+</tr>
+</tbody>
+</table>
+<p>Every type depends on a clean, consistent data substrate — which is exactly what <a href="https://data.show.reachrich.ai/">ReachRich</a> provides: unified data contract, adjusted-price continuity, multi-source cross-validation.</p>
+<h2 id="why-backtest-pretty-is-not-enough">Why "backtest-pretty" is not enough</h2>
+<p>The single biggest factor-mining trap is <strong>overfitting</strong>: test enough variants on the same history, and you will always find one with a great-looking Sharpe — but it is fitting noise, not signal. To separate real alpha from noise, every candidate factor must pass three gates:</p>
+<ol>
+<li><strong>Out-of-Sample (OOS)</strong> — re-validate on data segments the mining process never saw.</li>
+<li><strong>DSR (Deflated Sharpe Ratio) multiple-testing correction</strong> — explicitly adjust for how many variants were tried. See our deep-dive on <a href="backtesting-overfitting-cpcv-dsr-en.html">CPCV + DSR backtesting</a>.</li>
+<li><strong>Transaction-cost gate</strong> — strategy must still net positive after impact cost, fees, and slippage.</li>
+</ol>
+<h2 id="we-publish-methodology-not-factor-ip">We publish methodology, not factor IP</h2>
+<p>Serious quant teams disclose <strong>validation methodology and out-of-sample performance</strong>, not factor names/formulas/parameters/model weights. What is reproducible is the <em>discipline</em>, not the alpha itself.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="backtesting-overfitting-cpcv-dsr-en.html">How to prevent overfitting: CPCV + DSR</a></li>
+<li><a href="mcp-vs-rest-quant-data-en.html">API vs MCP for quant data access</a></li>
+<li><a href="../factor-mining-methodology.html">中文版 / Chinese version</a></li>
+<li><a href="/glossary/">Glossary: Factor, IC, IR, CPCV, DSR</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← More insights</a> · <a href="/">Home</a> · <a href="/glossary/">Glossary</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>For research demonstration only — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

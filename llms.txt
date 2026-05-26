@@ -1,0 +1,30 @@
+# RR-Agent
+
+> RR-Agent — LLM 驱动的 A股量化研究智能体:因子挖掘、ML 选股、组合优化、CPCV/DSR 回测,通过 MCP 调用 ReachRich 数据。
+
+声明:仅供数据研究用途,不构成投资建议。
+
+## 文档 Docs
+- [architecture](https://agent.show.reachrich.ai/docs/architecture.html)
+- [factors](https://agent.show.reachrich.ai/docs/factors.html)
+- [faq](https://agent.show.reachrich.ai/docs/faq.html)
+- [features](https://agent.show.reachrich.ai/docs/features.html)
+- [index](https://agent.show.reachrich.ai/docs/index.html)
+- [interfaces](https://agent.show.reachrich.ai/docs/interfaces.html)
+- [methodology](https://agent.show.reachrich.ai/docs/methodology.html)
+- [performance](https://agent.show.reachrich.ai/docs/performance.html)
+- [roadmap](https://agent.show.reachrich.ai/docs/roadmap.html)
+- [rr-agent](https://agent.show.reachrich.ai/docs/rr-agent.html)
+- [use-cases](https://agent.show.reachrich.ai/docs/use-cases.html)
+
+## 洞察 Insights (cornerstone articles)
+- [backtesting-overfitting-cpcv-dsr](https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr.html)
+- [factor-collinearity-deduplication](https://agent.show.reachrich.ai/insights/factor-collinearity-deduplication.html)
+- [factor-mining-methodology](https://agent.show.reachrich.ai/insights/factor-mining-methodology.html)
+- [llm-assisted-factor-mining](https://agent.show.reachrich.ai/insights/llm-assisted-factor-mining.html)
+- [portfolio-optimization-industry-neutral](https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral.html)
+- [realtime-risk-algo-execution](https://agent.show.reachrich.ai/insights/realtime-risk-algo-execution.html)
+
+## 相关 Related
+- 产品站 reachrich.ai · GitHub github.com/pagliazi/rr-agent-site
+- 在线 Demo https://agent.show.reachrich.ai/demo/

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>量化效果（数据研究） · RR-Agent</title>
+<meta name="description" content="本页为数据研究展示，仅供研究用途，不作为投资参考依据；历史业绩不代表未来；不构成投资建议或荐股，不承诺任何收益。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/docs/performance.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="量化效果（数据研究） · RR-Agent">
+<meta property="og:description" content="本页为数据研究展示，仅供研究用途，不作为投资参考依据；历史业绩不代表未来；不构成投资建议或荐股，不承诺任何收益。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/docs/performance.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"量化效果（数据研究）","description":"本页为数据研究展示，仅供研究用途，不作为投资参考依据；历史业绩不代表未来；不构成投资建议或荐股，不承诺任何收益。","inLanguage":"zh-CN","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"mainEntityOfPage":"https://agent.show.reachrich.ai/docs/performance.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"文档","item":"https://agent.show.reachrich.ai/docs/index.html"},{"@type":"ListItem","position":3,"name":"量化效果（数据研究）"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.75 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:820px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:22px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:28px;line-height:1.3;margin:0 0 16px} h2{font-size:21px;margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+ h3{font-size:17px;margin:24px 0 10px}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px}
+ pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto}
+ pre code{background:none;padding:0}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+ th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel);color:#e6edf3}
+ ul,ol{padding-left:22px} li{margin:5px 0}
+ hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:26px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:16px;color:var(--mut);font-size:12.5px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/docs/index.html">文档</a> › 量化效果（数据研究）</div>
+<h1 id="_1">量化效果（数据研究）</h1>
+<blockquote>
+<p>本页为<strong>数据研究展示</strong>，<strong>仅供研究用途，不作为投资参考依据</strong>；历史业绩不代表未来；不构成投资建议或荐股，<strong>不承诺任何收益</strong>。</p>
+</blockquote>
+<h2 id="_2">实盘盈亏走势（真实账户）</h2>
+<p><img alt="实盘持仓盯市收益率" src="../assets/charts/live_pnl_2026-05.png" /></p>
+<ul>
+<li><strong>真实实盘账户</strong>，持仓<strong>盯市收益率</strong>（基于真实持仓与每日收盘价，<strong>仅百分比、不含金额/持仓明细</strong>）。</li>
+<li>区间 <strong>2026-04-27 ~ 05-24</strong>（5/1–5/5 劳动节休市），盯市收益率 <strong>0% → +270.9%</strong>。</li>
+<li>行情与计算数据由 <strong>ReachRich</strong> 平台提供。</li>
+</ul>
+<h2 id="_3">因子库（匿名展示）</h2>
+<p>因子库覆盖多类型，均经 <strong>DSR（Deflated Sharpe）多重检验校正</strong>与<strong>样本外验证</strong>。出于知识产权保护，仅展示类型与状态，不公开名称、公式与参数：</p>
+<table>
+<thead>
+<tr>
+<th>因子</th>
+<th>类型</th>
+<th>状态</th>
+<th>样本外口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Factor A-07</td>
+<td>微结构</td>
+<td>OOS 验证通过</td>
+<td>OOS-IC 正，DSR PASS</td>
+</tr>
+<tr>
+<td>Factor B-12</td>
+<td>ML 合成</td>
+<td>OOS 验证通过</td>
+<td>DSR p&lt;0.05</td>
+</tr>
+<tr>
+<td>Factor C-03</td>
+<td>资金流</td>
+<td>观察中</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Factor D-21</td>
+<td>动量</td>
+<td>OOS 验证通过</td>
+<td>多周期 IC 一致</td>
+</tr>
+<tr>
+<td>Factor E-09</td>
+<td>反转</td>
+<td>OOS 验证通过</td>
+<td>深跌放量</td>
+</tr>
+<tr>
+<td>Factor F-15</td>
+<td>价量波动</td>
+<td>OOS 验证通过</td>
+<td>振幅压缩突破</td>
+</tr>
+<tr>
+<td>Factor G-04</td>
+<td>基本面</td>
+<td>观察中</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>类型分布</strong>：动量 · 反转 · 价量波动 · 微结构 · 资金流 · 基本面 · ML 合成（7 大类，持续扩充）。
+<strong>质量门槛</strong>：候选因子须通过 <strong>样本外（OOS）验证 + DSR 多重检验校正 + 交易成本 gate</strong> 方可进入实盘候选池；不达标进入观察/淘汰。</p>
+<h2 id="top-n">策略表现 · Top-N（回测口径）</h2>
+<blockquote>
+<p><strong>以下为回测口径，非实盘；实盘表现通常低于回测。历史业绩不代表未来，本平台不对任何收益作出承诺，亦不构成投资建议。</strong></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>排名</th>
+<th>策略类型</th>
+<th>回测 Sharpe</th>
+<th>口径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>动量 / 趋势启动</td>
+<td><strong>4.51</strong></td>
+<td>2025 年区间回测</td>
+</tr>
+<tr>
+<td>2</td>
+<td>组合优化（MVO，行业中性）</td>
+<td><strong>3.72</strong></td>
+<td>70 日回测，5518 股 × 111 行业</td>
+</tr>
+<tr>
+<td>3</td>
+<td>多因子组合（MVO）</td>
+<td><strong>2.37</strong></td>
+<td>70 日回测，命中率 57.1%，最大回撤 −1.20%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>风险约束组合</td>
+<td><strong>1.8+</strong></td>
+<td>CPCV 交叉验证（防过拟合）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>入选 Top-N 的策略均经 <strong>CPCV 交叉验证 + DSR 多重检验校正 + 交易成本 gate</strong>（见<a href="methodology.html">方法论</a>）。</li>
+<li>上述为<strong>回测</strong>结果；我们如实标注口径，不以回测冒充实盘。<strong>不承诺任何收益。</strong></li>
+</ul>
+<h2 id="_4">验证方法（不涉实现）</h2>
+<ul>
+<li><strong>CPCV</strong>（组合purged交叉验证）：防止时间序列过拟合</li>
+<li><strong>DSR</strong>（Deflated Sharpe）：对多重检验/选择偏差做校正</li>
+<li><strong>样本外（OOS）回放</strong>：以未来数据检验，而非样本内</li>
+<li><strong>交易成本 gate</strong>：扣除滑点/手续费后仍需为正</li>
+<li><strong>实盘 paper trade</strong>：上实盘前先纸上验证</li>
+</ul>
+<p>详见 <a href="methodology.html">方法论</a>。</p>
+<div class="nav"><a href="/">← 返回首页</a> · <a href="/docs/index.html">文档索引</a> · <a href="/demo/">在线 Demo</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本页仅供数据研究用途,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。 · For research only; not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

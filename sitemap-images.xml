@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://agent.show.reachrich.ai/</loc>
+    <image:image><image:loc>https://agent.show.reachrich.ai/assets/img/ui-dashboard.png</image:loc></image:image>
+    <image:image><image:loc>https://agent.show.reachrich.ai/assets/img/ui-market.png</image:loc></image:image>
+    <image:image><image:loc>https://agent.show.reachrich.ai/assets/img/ui-news.png</image:loc></image:image>
+    <image:image><image:loc>https://agent.show.reachrich.ai/assets/logo.png</image:loc></image:image>
+    <image:image><image:loc>https://agent.show.reachrich.ai/assets/og-cover.png</image:loc></image:image>
+  </url>
+</urlset>

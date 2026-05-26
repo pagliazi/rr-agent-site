@@ -1,0 +1,63 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验 · RR-Agent</title>
+<meta name="description" content="量化回测防过拟合三件套:CPCV 组合purged交叉验证、DSR(Deflated Sharpe Ratio)多重检验校正、交易成本 gate。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验"><meta property="og:description" content="量化回测防过拟合三件套:CPCV 组合purged交叉验证、DSR(Deflated Sharpe Ratio)多重检验校正、交易成本 gate。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验","description":"量化回测防过拟合三件套:CPCV 组合purged交叉验证、DSR(Deflated Sharpe Ratio)多重检验校正、交易成本 gate。","inLanguage":"zh-CN","datePublished":"2026-05-27","dateModified":"2026-05-27","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"洞察 Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} ul,ol{padding-left:22px} li{margin:5px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style><script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "HowTo", "name": "如何用 CPCV + DSR 防止回测过拟合", "description": "实施 CPCV 交叉验证 + DSR 多重检验校正 + 交易成本 gate 三件套,验证候选量化因子的真实有效性。", "step": [{"@type": "HowToStep", "name": "1. CPCV 切分", "text": "把时间序列切成 N 块,做组合式 train/test 划分,在 train 与 test 间设置 purge + embargo 防止信息泄漏,得到回测指标的分布而非单点。"}, {"@type": "HowToStep", "name": "2. DSR 校正", "text": "对试验次数、回测长度、收益偏度峰度做显式校正,得到去除多重检验偏差后的真实显著性。"}, {"@type": "HowToStep", "name": "3. 交易成本 gate", "text": "扣除冲击成本、手续费、滑点;策略须净后仍为正才能进候选池。换手率越高这关越关键。"}]}
+</script>
+</head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">洞察</a> › 量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验</div>
+<h1 id="cpcv-dsr">量化回测如何防过拟合:CPCV 交叉验证 + DSR 多重检验</h1>
+<blockquote>
+<p>"回测 Sharpe 很高"几乎不能说明任何问题——只要你试的参数组合够多,总有一个看起来很好。本文讲量化回测中防过拟合的三件套(方法论科普,数字均为口径说明,非业绩承诺)。</p>
+</blockquote>
+<h2 id="_1">问题:多重检验下的"幸存者"</h2>
+<p>如果你在同一段历史上测试了 N 个策略变体,即使它们全是随机的,最高的那个 Sharpe 也会显得很"显著"。这就是<strong>多重检验偏差</strong>。直接拿回测最高 Sharpe 当结论,等于在自欺。</p>
+<h2 id="_2">三件套</h2>
+<h3 id="1-cpcv-purged">1. CPCV(组合 purged 交叉验证)</h3>
+<p>把时间序列切成多个块,做组合式的训练/测试划分,并在训练与测试之间设置 <strong>purge / embargo</strong> 防止信息泄露。比单次留出法更稳健,能给出回测指标的<strong>分布</strong>而非单点。</p>
+<h3 id="2-dsrdeflated-sharpe-ratio">2. DSR(Deflated Sharpe Ratio)</h3>
+<p>对"试了多少次"做显式校正:把试验次数、回测长度、收益偏度峰度都纳入,算出<strong>扣除多重检验后的真实显著性</strong>。一个 DSR 显著的因子,远比一个裸 Sharpe 高的因子可信。</p>
+<h3 id="3-gate">3. 交易成本 gate</h3>
+<p>回测必须扣除<strong>冲击成本 + 手续费 + 滑点</strong>。很多"高 Sharpe"因子在扣成本后归零。换手越高,这一关越致命。</p>
+<h2 id="_3">诚实口径:回测 ≠ 实盘</h2>
+<p>回测数字一律标注"回测口径",<strong>绝不冒充实盘</strong>;实盘曲线应以真实持仓 × 真实收盘价计算、可对账。任何把回测 Sharpe 当真实业绩宣传的做法,在持牌合规下后果更重。</p>
+<p>数据口径的一致性(同源实时与历史)是回测可信的前提,见 <a href="https://data.show.reachrich.ai/docs/reliability.html">ReachRich 稳定与准确</a>。</p>
+
+<h2>📖 相关阅读 / Related</h2>
+<ul>
+<li><a href="factor-mining-methodology.html">因子挖掘方法论:七类因子</a></li>
+<li><a href="portfolio-optimization-industry-neutral.html">组合优化:行业中性与归因</a></li>
+<li><a href="factor-collinearity-deduplication.html">因子共线性诊断</a></li>
+<li><a href="https://agent.show.reachrich.ai/glossary/#cpcv">术语:CPCV / DSR / 过拟合</a></li>
+<li><a href="https://agent.show.reachrich.ai/compare/">vs Backtrader:为什么内置 CPCV</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← 更多洞察</a> · <a href="/">首页</a> · <a href="/demo/">在线 Demo</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本文仅为量化数据研究与方法论科普,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。Educational content on quantitative methodology — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

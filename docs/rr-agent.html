@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RR-Agent — 总览 · RR-Agent</title>
+<meta name="description" content="RR-Agent 在调用关系中是调用方：通过 API / MCP 向 ReachRich（独立项目）取数，在干净的数据底座上完成因子挖掘 → ML 选股 → 组合优化 → 回测 → 执行（用户自主）的全链研究。多 provider 大模型贯穿全链。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/docs/rr-agent.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="RR-Agent — 总览 · RR-Agent">
+<meta property="og:description" content="RR-Agent 在调用关系中是调用方：通过 API / MCP 向 ReachRich（独立项目）取数，在干净的数据底座上完成因子挖掘 → ML 选股 → 组合优化 → 回测 → 执行（用户自主）的全链研究。多 provider 大模型贯穿全链。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/docs/rr-agent.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"RR-Agent — 总览","description":"RR-Agent 在调用关系中是调用方：通过 API / MCP 向 ReachRich（独立项目）取数，在干净的数据底座上完成因子挖掘 → ML 选股 → 组合优化 → 回测 → 执行（用户自主）的全链研究。多 provider 大模型贯穿全链。","inLanguage":"zh-CN","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"mainEntityOfPage":"https://agent.show.reachrich.ai/docs/rr-agent.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"文档","item":"https://agent.show.reachrich.ai/docs/index.html"},{"@type":"ListItem","position":3,"name":"RR-Agent — 总览"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.75 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:820px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:22px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:28px;line-height:1.3;margin:0 0 16px} h2{font-size:21px;margin:34px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+ h3{font-size:17px;margin:24px 0 10px}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px}
+ pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto}
+ pre code{background:none;padding:0}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+ th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel);color:#e6edf3}
+ ul,ol{padding-left:22px} li{margin:5px 0}
+ hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:26px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:40px;padding-top:16px;color:var(--mut);font-size:12.5px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/docs/index.html">文档</a> › RR-Agent — 总览</div>
+<h1 id="rr-agent">RR-Agent — 总览</h1>
+<blockquote>
+<p>RR-Agent 在调用关系中是<strong>调用方</strong>：通过 API / MCP 向 <a href="https://reachrich.ai">ReachRich</a>（独立项目）取数，在干净的数据底座上完成<strong>因子挖掘 → ML 选股 → 组合优化 → 回测 → 执行（用户自主）</strong>的全链研究。多 provider 大模型贯穿全链。</p>
+</blockquote>
+<h2 id="_1">定位</h2>
+<p>把"从数据到决策"的全过程串成一条<strong>可研究、可验证、可复现</strong>的流水线，并由 AI 在每一环提供协助。它不是黑盒信号源，而是一套<strong>研究工作台</strong>：方法可解释、口径可披露、结果可对账。</p>
+<h2 id="_2">研究全链</h2>
+<pre><code>数据(ReachRich) → 因子挖掘 → ML 选股 → 组合优化 → 回测验证 → 执行工具(用户自主)
+                     └──────────── 多 provider LLM 贯穿协助 ────────────┘
+</code></pre>
+<p><strong>① 因子挖掘</strong>
+- LLM 辅助生成候选因子，覆盖动量 / 反转 / 价量波动 / 微结构 / 资金流 / 基本面 / ML 合成共七类。
+- 候选并不直接采用，须先过严格验证（见<a href="methodology.html">方法论</a>）。</p>
+<p><strong>② ML 选股</strong>
+- 梯度提升等模型对多因子打分排序，叠加多重检验校正抑制虚假显著。</p>
+<p><strong>③ 组合优化</strong>
+- 行业中性 + 风险约束的权重分配，控制单一行业 / 风格的集中暴露。
+- 支持风险归因（风格因子暴露分解），持仓构成可解释。</p>
+<p><strong>④ 回测验证</strong>
+- CPCV 交叉验证 + DSR 多重检验校正 + 交易成本 gate，详见<a href="methodology.html">方法论</a>。
+- 回测结果一律标注"回测口径"，<strong>绝不以回测冒充实盘</strong>。</p>
+<p><strong>⑤ 执行工具（用户自主）</strong>
+- 算法订单（VWAP / TWAP / 分批）、实时风控（仓位 / 回撤 / 异动）、止损止盈与调仓。
+- 供用户<strong>自主研究与执行</strong>，<strong>非代客理财、非投资建议</strong>。</p>
+<h2 id="provider-llm">多 provider LLM</h2>
+<ul>
+<li><strong>可配置、可切换多家大模型提供商与模型</strong>，按任务自由选型，<strong>不绑定单一模型</strong>。</li>
+<li>LLM 贯穿数据→因子→策略→执行全链：辅助生成、解释、归因与自然语言交互。</li>
+</ul>
+<h2 id="reachrich">与 ReachRich 的关系</h2>
+<pre><code>RR-Agent（调用方） ──① 取数──▶ ReachRich（被调用方 · reachrich.ai）
+                  ◀─② 行情/资讯/因子原料──
+</code></pre>
+<p>RR-Agent 不采集数据，只消费 ReachRich 提供的统一口径数据；如何采集、清洗、校验由 ReachRich（独立项目）负责。</p>
+<hr />
+<blockquote>
+<p>本页描述能力与方法，<strong>不涉及实现细节、模型权重、参数，也不涉及主机、IP、技术栈或部署架构</strong>。免责：仅供数据研究用途，不构成投资建议或收益承诺。</p>
+</blockquote>
+<div class="nav"><a href="/">← 返回首页</a> · <a href="/docs/index.html">文档索引</a> · <a href="/demo/">在线 Demo</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本页仅供数据研究用途,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。 · For research only; not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

@@ -1,0 +1,96 @@
+<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API vs MCP: Two Paradigms for Quantitative Data Access · RR-Agent</title>
+<meta name="description" content="Two ways to wire quant research to data: traditional HTTP REST API (programmatic, predictable) versus MCP (Model Context Protocol — let LLMs discover and call tools directly). When to use which, and why they coexist rather than compete.">
+<meta name="keywords" content="MCP, model context protocol, quantitative data API, LLM tool use, Anthropic MCP, China A-share data, REST vs MCP, quant infrastructure">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/mcp-vs-rest-quant-data-en.html">
+<link rel="alternate" hreflang="en" href="https://agent.show.reachrich.ai/insights/mcp-vs-rest-quant-data-en.html">
+<link rel="alternate" hreflang="zh-CN" href="https://agent.show.reachrich.ai/insights/mcp-vs-rest-quant-data.html">
+<meta property="og:type" content="article"><meta property="og:title" content="API vs MCP: Two Paradigms for Quantitative Data Access">
+<meta property="og:description" content="Two ways to wire quant research to data: traditional HTTP REST API (programmatic, predictable) versus MCP (Model Context Protocol — let LLMs discover and call tools directly). When to use which, and why they coexist rather than compete.">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/mcp-vs-rest-quant-data-en.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"API vs MCP: Two Paradigms for Quantitative Data Access","description":"Two ways to wire quant research to data: traditional HTTP REST API (programmatic, predictable) versus MCP (Model Context Protocol — let LLMs discover and call tools directly). When to use which, and why they coexist rather than compete.","inLanguage":"en","datePublished":"2026-05-29","dateModified":"2026-05-29","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/mcp-vs-rest-quant-data-en.html","keywords":"MCP, model context protocol, quantitative data API, LLM tool use, Anthropic MCP, China A-share data, REST vs MCP, quant infrastructure"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"API vs MCP: Two Paradigms for Quantitative Data Access"}]}
+</script>
+<style>
+:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ul,ol{padding-left:22px} li{margin:5px 0}
+.nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">Insights</a> › API vs MCP: Two Paradigms for Quantitative Data Access</div>
+<h1 id="api-vs-mcp-two-paradigms-for-quantitative-data-access">API vs MCP: Two Paradigms for Quantitative Data Access</h1>
+<blockquote>
+<p>There are now two ways to wire quant research to data: classical <strong>HTTP REST API</strong> (your program calls it) and <strong>MCP — Model Context Protocol</strong> (let an LLM discover and call tools directly). They are complementary, not competitors. Here is how to choose.</p>
+</blockquote>
+<h2 id="the-classical-path-http-api">The classical path: HTTP API</h2>
+<p>Your code calls endpoints, parses JSON, handles auth:</p>
+<pre><code class="language-python">r = requests.get(
+    &quot;https://reachrich.ai/api/market/quote&quot;,
+    params={&quot;code&quot;: &quot;600519&quot;},
+    headers={&quot;Authorization&quot;: &quot;Bearer ...&quot;},
+)
+</code></pre>
+<ul>
+<li><strong>Strengths</strong>: deterministic, cacheable, batchable, concurrency-controllable</li>
+<li><strong>Best for</strong>: backtest pipelines, scheduled data ingestion, production strategy execution</li>
+</ul>
+<h2 id="the-new-path-mcp">The new path: MCP</h2>
+<p><a href="https://modelcontextprotocol.io">Model Context Protocol</a> (Anthropic, late 2024) is an open standard that lets LLMs <strong>discover and invoke tools</strong> directly. For quant data:</p>
+<ul>
+<li>An LLM in a conversation invokes <code>rr_quote(code="600519")</code> to get real-time price</li>
+<li>Multi-tool composition ("show me 600519's F10, recent fund flow, and same-industry peers") — the LLM decomposes and calls in sequence</li>
+<li>The user speaks natural language — no code</li>
+</ul>
+<p><strong>Strengths</strong>: research-exploratory, conversation-driven, no programming barrier, composable across multiple MCP tools (data + execution + visualization).
+<strong>Best for</strong>: ad-hoc research, LLM agent workflows, prototyping.</p>
+<h2 id="not-replacement-layered-access">Not replacement — layered access</h2>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Mechanism</th>
+<th>User</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Programmatic</td>
+<td>HTTP REST</td>
+<td>Production strategies, automation</td>
+</tr>
+<tr>
+<td>Conversational</td>
+<td>MCP</td>
+<td>Researchers, LLM agents</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://data.show.reachrich.ai/">ReachRich</a> provides both: REST with token auth + MCP for direct Claude / Cursor / Cline access, sharing the same data contract.</p>
+<h2 id="security-rate-limiting">Security &amp; rate-limiting</h2>
+<p>Both paths need quotas, auth, and audit. Quant data is a commercial asset — bare endpoints invite scraping and abuse. Design with rate limits, per-key quotas, and per-tool MCP permissions from day one.</p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="factor-mining-methodology-en.html">Factor mining methodology</a></li>
+<li><a href="backtesting-overfitting-cpcv-dsr-en.html">CPCV + DSR backtesting</a></li>
+<li><a href="../api-vs-mcp-quant-data.html">中文版</a> (lives on data.show.reachrich.ai)</li>
+<li><a href="/glossary/#mcp">Glossary: MCP, API, data contract</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← More insights</a> · <a href="/">Home</a> · <a href="/glossary/">Glossary</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>For research demonstration only — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

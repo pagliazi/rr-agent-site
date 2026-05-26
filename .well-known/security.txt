@@ -1,0 +1,4 @@
+Contact: mailto:support@reachrich.ai
+Expires: 2027-05-27T00:00:00.000Z
+Preferred-Languages: zh, en
+Canonical: https://agent.show.reachrich.ai/.well-known/security.txt

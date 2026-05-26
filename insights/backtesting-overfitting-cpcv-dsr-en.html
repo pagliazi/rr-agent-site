@@ -1,0 +1,64 @@
+<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio · RR-Agent</title>
+<meta name="description" content="A high Sharpe in backtest tells you almost nothing. This post explains the three-part anti-overfitting toolkit for serious quant research: CPCV (Combinatorial Purged Cross-Validation), DSR (Deflated Sharpe Ratio multiple-testing correction), and the transaction-cost gate.">
+<meta name="keywords" content="CPCV, deflated Sharpe ratio, DSR, backtesting overfitting, multiple testing correction, walk-forward, transaction cost gate, quantitative research">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr-en.html">
+<link rel="alternate" hreflang="en" href="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr-en.html">
+<link rel="alternate" hreflang="zh-CN" href="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr.html">
+<meta property="og:type" content="article"><meta property="og:title" content="How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio">
+<meta property="og:description" content="A high Sharpe in backtest tells you almost nothing. This post explains the three-part anti-overfitting toolkit for serious quant research: CPCV (Combinatorial Purged Cross-Validation), DSR (Deflated Sharpe Ratio multiple-testing correction), and the transaction-cost gate.">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr-en.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio","description":"A high Sharpe in backtest tells you almost nothing. This post explains the three-part anti-overfitting toolkit for serious quant research: CPCV (Combinatorial Purged Cross-Validation), DSR (Deflated Sharpe Ratio multiple-testing correction), and the transaction-cost gate.","inLanguage":"en","datePublished":"2026-05-29","dateModified":"2026-05-29","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/backtesting-overfitting-cpcv-dsr-en.html","keywords":"CPCV, deflated Sharpe ratio, DSR, backtesting overfitting, multiple testing correction, walk-forward, transaction cost gate, quantitative research"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio"}]}
+</script>
+<style>
+:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ul,ol{padding-left:22px} li{margin:5px 0}
+.nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">Insights</a> › How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio</div>
+<h1 id="how-to-prevent-overfitting-in-quant-backtesting-cpcv-deflated-sharpe-ratio">How to Prevent Overfitting in Quant Backtesting: CPCV + Deflated Sharpe Ratio</h1>
+<blockquote>
+<p>"Backtest Sharpe is high" tells you almost nothing — if you tried enough variants, one will always look great. This is the <strong>multiple-testing trap</strong>. Here is the discipline that distinguishes real strategies from artifacts.</p>
+</blockquote>
+<h2 id="the-problem-survivorship-under-multiple-testing">The problem: survivorship under multiple testing</h2>
+<p>If you test N strategy variants on the same history, even if all variants are random, the <em>best</em> one will appear "significant" by chance. Naively reporting the top Sharpe is self-deception. Two-thirds of the published quant literature would not survive proper multiple-testing correction.</p>
+<h2 id="the-three-part-toolkit">The three-part toolkit</h2>
+<h3 id="1-cpcv-combinatorial-purged-cross-validation">1. CPCV (Combinatorial Purged Cross-Validation)</h3>
+<p>Time-series-friendly cross-validation: slice the series into blocks, do combinatorial train/test splits, and apply <strong>purge + embargo</strong> between train and test to prevent information leakage. Output is a <em>distribution</em> of backtest metrics — not a single point. Far more robust than single hold-out.</p>
+<p>CPCV originates from Marcos López de Prado's work; it has become the de-facto standard for serious A-share quant.</p>
+<h3 id="2-dsr-deflated-sharpe-ratio">2. DSR (Deflated Sharpe Ratio)</h3>
+<p>DSR explicitly corrects for how many variants you tried, the backtest length, and the skew/kurtosis of returns. A factor that is <em>DSR-significant</em> is far more credible than one with a high naked Sharpe. Standard formulation:</p>
+<pre><code>DSR = Z[ (SR_observed - E[max_SR | N_tries]) / std_max_SR ]
+</code></pre>
+<p>where the second term captures the expected best-of-N under the null. Most "great Sharpe" candidates collapse here.</p>
+<h3 id="3-transaction-cost-gate">3. Transaction-cost gate</h3>
+<p>Backtests must net impact cost + fees + slippage. Many "high Sharpe" factors collapse to zero net of costs. The higher your turnover, the more lethal this gate.</p>
+<h2 id="honest-reporting-backtest-live">Honest reporting: backtest ≠ live</h2>
+<p>Backtest numbers must be labelled <em>backtest-grade</em>; live equity curves should reconstruct from real positions × real close prices, reconcilable against broker statements. <strong>A high backtest Sharpe in marketing copy is a regulatory red flag in licensed-advisor jurisdictions.</strong></p>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="factor-mining-methodology-en.html">Factor mining methodology</a></li>
+<li><a href="../backtesting-overfitting-cpcv-dsr.html">中文版</a></li>
+<li><a href="/glossary/#cpcv">Glossary: CPCV, DSR, Sharpe, OOS, multiple testing</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← More insights</a> · <a href="/">Home</a> · <a href="/glossary/">Glossary</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>For research demonstration only — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

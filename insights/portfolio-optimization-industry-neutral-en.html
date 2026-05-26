@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Optimization: Industry Neutrality &amp; Risk Attribution · RR-Agent</title>
+<meta name="description" content="Turning factor scores into executable position weights — the portfolio optimization layer decides how to allocate, how to control risk, and how to neutralize industry exposure. Without this layer, alpha gets confounded with industry beta.">
+<meta name="keywords" content="portfolio optimization, industry neutral, risk attribution, Barra style factors, factor alpha, weight allocation, drawdown control, quantitative finance">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral-en.html">
+<link rel="alternate" hreflang="en" href="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral-en.html">
+<link rel="alternate" hreflang="zh-CN" href="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral.html">
+<meta property="og:type" content="article"><meta property="og:title" content="Portfolio Optimization: Industry Neutrality &amp; Risk Attribution">
+<meta property="og:description" content="Turning factor scores into executable position weights — the portfolio optimization layer decides how to allocate, how to control risk, and how to neutralize industry exposure. Without this layer, alpha gets confounded with industry beta.">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral-en.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Portfolio Optimization: Industry Neutrality &amp; Risk Attribution","description":"Turning factor scores into executable position weights — the portfolio optimization layer decides how to allocate, how to control risk, and how to neutralize industry exposure. Without this layer, alpha gets confounded with industry beta.","inLanguage":"en","datePublished":"2026-05-29","dateModified":"2026-05-29","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/portfolio-optimization-industry-neutral-en.html","keywords":"portfolio optimization, industry neutral, risk attribution, Barra style factors, factor alpha, weight allocation, drawdown control, quantitative finance"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"Portfolio Optimization: Industry Neutrality &amp; Risk Attribution"}]}
+</script>
+<style>:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px}
+ul,ol{padding-left:22px} li{margin:5px 0}
+.nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">Insights</a> › Portfolio Optimization: Industry Neutrality &amp; Risk Attribution</div>
+<h1 id="portfolio-optimization-industry-neutrality-risk-attribution">Portfolio Optimization: Industry Neutrality &amp; Risk Attribution</h1>
+<blockquote>
+<p>Picking good factors is only the start. <strong>Turning factor scores into executable positions requires a portfolio optimization layer</strong> — this is where weights get allocated, risk gets controlled, and industry exposure gets managed. This post covers the core constraints and attribution discipline (methodology only; no parameters).</p>
+</blockquote>
+<h2 id="why-industry-neutrality">Why industry-neutrality</h2>
+<p>If your factor is especially effective in renewables, and you don't constrain industry exposure, the model will "overweight renewables." Surface explanation: factor working. Reality: industry beta driving everything. When the industry style rotates, the whole portfolio drawdowns together.</p>
+<p><strong>Industry-neutral constraints</strong> force the portfolio's exposure to each industry to match the benchmark (e.g., CSI 300 industry weights). This <strong>strips out industry beta</strong>, leaving relatively pure factor alpha. The cost is some upper-bound return, but stability improves dramatically — which matters more for institutional capital and licensed-advisor environments.</p>
+<h2 id="risk-attribution-where-does-return-actually-come-from">Risk attribution: where does return actually come from</h2>
+<p>Risk attribution <strong>decomposes total return/volatility into risk sources</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Industry</strong></td>
+<td>Industry exposure contribution</td>
+</tr>
+<tr>
+<td><strong>Style</strong> (Barra)</td>
+<td>Size, Value, Momentum, Quality, Volatility, ...</td>
+</tr>
+<tr>
+<td><strong>Country / Market</strong></td>
+<td>Aggregate market beta</td>
+</tr>
+<tr>
+<td><strong>Specific</strong></td>
+<td>Residual = "pure alpha"</td>
+</tr>
+</tbody>
+</table>
+<p>The ideal factor strategy: <strong>specific (residual) alpha significant and positive; industry/style contributions near zero</strong>. If attribution shows 80% of return comes from industry beta, the "alpha factor" is actually industry timing — not sustainable.</p>
+<h2 id="weight-allocation-discipline">Weight allocation discipline</h2>
+<ul>
+<li><strong>Per-stock cap</strong> — prevent excessive concentration (typical 1-3%)</li>
+<li><strong>Turnover constraint</strong> — prevent excessive trading eating costs</li>
+<li><strong>Volatility target</strong> — control aggregate portfolio volatility</li>
+<li><strong>Drawdown cap</strong> — when threshold hit, auto-reduce position</li>
+</ul>
+<h2 id="related">Related</h2>
+<ul>
+<li><a href="https://agent.show.reachrich.ai/insights/realtime-risk-algo-execution.html">Real-time risk &amp; algo execution</a></li>
+<li><a href="../portfolio-optimization-industry-neutral.html">中文版</a></li>
+<li><a href="https://agent.show.reachrich.ai/glossary/#barra">Glossary: Barra, industry-neutral, risk attribution</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← More insights</a> · <a href="/">Home</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>For research demonstration only — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

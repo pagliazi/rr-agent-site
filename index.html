@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RR-Agent — 自研 A股量化研究工作台 · 因子库 / CPCV 回测 / 组合优化</title>
+<meta name="description" content="自研 A股量化研究工作台:多年量化经验沉淀的因子库(动量/反转/微结构/资金流/基本面/ML 合成七类)、ML 选股、CPCV+DSR 防过拟合回测、行业中性组合优化、算法订单执行。数据由 ReachRich 多源校验保证一致性。Web/CLI/API/MCP 多端接入。Self-developed quantitative research workbench for China A-shares — in-house factor library, ML stock selection, CPCV/DSR-validated backtesting.">
+<meta name="keywords" content="A股量化,自研量化平台,量化研究工作台,因子库,因子挖掘,ML选股,CPCV回测,DSR,量化回测,alpha因子,组合优化,行业中性,算法订单,实时风控,quantitative trading,factor library,alpha factors,ml stock selection,backtesting,a-share,china stock market,mcp">
+<meta name="author" content="ReachRich">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="baidu-site-verification" content="codeva-4DRDcb7856" />
+<link rel="canonical" href="https://agent.show.reachrich.ai/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="RR-Agent — 自研 A股量化研究工作台">
+<meta property="og:description" content="自研 A股量化研究工作台:因子库 · ML 选股 · CPCV/DSR 回测 · 组合优化 · 算法执行。多年量化研究沉淀,数据由 ReachRich 多源校验。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="RR-Agent — A股量化研究智能体">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="RR-Agent — 自研 A股量化研究工作台">
+<meta name="twitter:description" content="自研 A股量化研究工作台:因子库、ML 选股、CPCV/DSR 回测、组合优化、算法执行。数据由 ReachRich 多源校验。">
+<meta name="twitter:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<link rel="alternate" hreflang="zh-CN" href="https://agent.show.reachrich.ai/">
+<link rel="alternate" hreflang="x-default" href="https://agent.show.reachrich.ai/">
+<link rel="icon" href="demo/static/favicon.ico">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "RR-Agent",
+      "alternateName": "RR-Agent 自研量化研究工作台",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web, CLI, API, MCP",
+      "url": "https://agent.show.reachrich.ai/",
+      "description": "Self-developed quantitative research workbench for China A-shares: in-house factor library, ML stock selection, CPCV/DSR-validated backtesting, industry-neutral portfolio optimization, algorithmic execution. Built on multi-source-validated ReachRich data. Multi-interface access (Web/CLI/API/MCP).",
+      "keywords": "quantitative trading, factor library, alpha factors, ML stock selection, CPCV backtesting, DSR, A-share, china stock market, MCP, industry-neutral portfolio, algorithmic execution",
+      "author": {"@type": "Organization", "name": "ReachRich", "url": "https://reachrich.ai"},
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Interactive demo"}
+    },
+    {
+      "@type": "WebSite",
+      "name": "RR-Agent",
+      "url": "https://agent.show.reachrich.ai/",
+      "inLanguage": ["zh-CN", "en"]
+    },
+    {
+      "@type": "Organization",
+      "name": "ReachRich",
+      "url": "https://reachrich.ai",
+      "logo": "https://agent.show.reachrich.ai/assets/logo.png",
+      "email": "support@reachrich.ai",
+      "foundingDate": "2026",
+      "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "support@reachrich.ai", "availableLanguage": ["zh","en"]},
+      "sameAs": ["https://github.com/pagliazi/rr-agent-site", "https://github.com/pagliazi/reachrich-site"]
+    }
+  ]
+}
+</script>
+<style>
+  :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.7 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 20px 64px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:999px;background:#0f2a17;color:var(--acc);font-size:12px;border:1px solid #1c4a2b;margin-bottom:18px}
+  h1{font-size:30px;margin:0 0 8px;line-height:1.3} .en{color:var(--mut);font-size:17px;font-weight:400;margin:0 0 18px}
+  .lead{font-size:16px;color:#cdd6e0;margin:0 0 26px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 36px}
+  .cta a{text-decoration:none;font-size:14px;padding:10px 18px;border-radius:9px;border:1px solid var(--line)}
+  .cta a.primary{background:var(--acc);color:#06210f;border-color:var(--acc);font-weight:600}
+  .cta a.ghost{background:var(--panel);color:var(--txt)}
+  h2{font-size:18px;margin:34px 0 14px;color:#e6edf3}
+  .pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 10px}
+  .pipe .c{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px}
+  .pipe .t{font-weight:600;margin-bottom:5px;font-size:14px} .pipe .l{color:var(--mut);font-size:12.5px}
+  ul{padding-left:20px;color:#cdd6e0} li{margin:6px 0}
+  a{color:var(--acc2)} .mut{color:var(--mut);font-size:13px}
+  footer{border-top:1px solid var(--line);margin-top:40px;padding-top:18px;color:var(--mut);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">自研量化研究工作台 · Self-developed Quant Workbench</span>
+    <h1>RR-Agent — 自研 A股量化研究工作台</h1>
+    <p class="en">A self-developed quantitative research workbench for China A-shares — in-house factor library, ML stock selection, CPCV/DSR backtesting, portfolio optimization &amp; algorithmic execution.</p>
+    <p class="lead"><strong>自研 A股量化研究工作台</strong>。多年量化研究经验沉淀的<strong>因子库</strong>、ML 选股、CPCV+DSR 严格回测、行业中性组合优化与算法订单执行;数据由 <a href="https://reachrich.ai">ReachRich</a> 多源校验保证一致性。提供 Web 控制台、命令行 <code>rr-agent</code>、API 与 MCP 多端接入。<em>多 provider 大模型作为研究助手工具贯穿(LLM 是工具,非产品身份)。</em></p>
+    <div class="cta">
+      <a class="primary" href="demo/">▶ 在线 Demo（真实前端控制台）</a>
+      <a class="ghost" href="https://github.com/pagliazi/rr-agent-site">GitHub 仓库</a>
+      <a class="ghost" href="https://reachrich.ai">reachrich.ai</a>
+    </div>
+  </header>
+
+  <main>
+    <h2>研究全链 · Research pipeline</h2>
+    <div class="pipe">
+      <div class="c"><div class="t">因子挖掘 Factor mining</div><div class="l">LLM 辅助生成候选,覆盖动量/反转/价量/微结构/资金流/基本面/ML 合成七类</div></div>
+      <div class="c"><div class="t">ML 选股 Stock selection</div><div class="l">梯度提升等模型打分排序 + 多重检验校正</div></div>
+      <div class="c"><div class="t">组合优化 Portfolio</div><div class="l">行业中性 + 风险约束的权重分配与风险归因</div></div>
+      <div class="c"><div class="t">回测 Backtesting</div><div class="l">CPCV 交叉验证 + DSR 多重检验校正 + 交易成本 gate</div></div>
+      <div class="c"><div class="t">执行 Execution</div><div class="l">算法订单、实时风控、止损调仓(用户自主,非代客理财)</div></div>
+    </div>
+
+    <h2>文档 · Documentation</h2>
+    <ul>
+      <li><a href="/docs/rr-agent.html">总览 Overview</a> · <a href="/docs/methodology.html">研究方法论 Methodology</a> · <a href="/docs/factors.html">因子库 Factor library</a></li>
+      <li><a href="/docs/features.html">功能 Features</a> · <a href="/docs/interfaces.html">接口 Interfaces (Web/CLI/API/MCP)</a> · <a href="/docs/performance.html">量化效果 Performance</a></li>
+      <li><a href="/docs/use-cases.html">应用场景 Use cases</a> · <a href="/docs/roadmap.html">路线图 Roadmap</a> · <a href="/docs/faq.html">FAQ</a></li>
+    </ul>
+
+    <h2>数据来自 ReachRich · Powered by ReachRich</h2>
+    <p class="mut">RR-Agent 自身不采集数据,作为调用方通过 API / MCP 向 <a href="https://github.com/pagliazi/reachrich-site">ReachRich 多市场数据平台</a>(A股/港股/美股 行情、资讯、基本面、资金流)请求数据原料。两者职责分离、独立演进。 / RR-Agent consumes market data from ReachRich via API / MCP.</p>
+    <h2>词典 · 对比 · 洞察</h2>
+    <p class="mut">📖 <a href="/glossary/">A股量化术语词典</a>(60+ 术语)· ⚖️ <a href="/compare/">vs Qlib / Backtrader / akshare / Wind 同类对比</a> · 📚 <a href="/insights/index.html">6 篇 cornerstone 文章</a></p>
+    <p class="mut" style="margin-top:18px">量化方法论与数据工程科普(非投资建议):<a href="/insights/index.html">阅读全部洞察 →</a></p>
+  </main>
+
+  <footer>
+    本页面仅为 RR-Agent 能力展示,所有数据、因子、回测仅供数据研究用途,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。 ·
+    For research demonstration only; not investment advice. © 2026 ReachRich · <a href="https://reachrich.ai">reachrich.ai</a>
+  </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM 辅助因子挖掘:从候选生成到严格验证 · RR-Agent</title>
+<meta name="description" content="大语言模型在量化因子挖掘中的角色:候选构造、领域知识注入、防过拟合验证全链路;LLM 加速思路,但不替代统计纪律。">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/insights/llm-assisted-factor-mining.html">
+<meta property="og:type" content="article"><meta property="og:site_name" content="RR-Agent">
+<meta property="og:title" content="LLM 辅助因子挖掘:从候选生成到严格验证"><meta property="og:description" content="大语言模型在量化因子挖掘中的角色:候选构造、领域知识注入、防过拟合验证全链路;LLM 加速思路,但不替代统计纪律。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/insights/llm-assisted-factor-mining.html">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"LLM 辅助因子挖掘:从候选生成到严格验证","description":"大语言模型在量化因子挖掘中的角色:候选构造、领域知识注入、防过拟合验证全链路;LLM 加速思路,但不替代统计纪律。","inLanguage":"zh-CN","datePublished":"2026-05-28","dateModified":"2026-05-28","author":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai"},"publisher":{"@type":"Organization","name":"ReachRich","url":"https://reachrich.ai","logo":{"@type":"ImageObject","url":"https://agent.show.reachrich.ai/assets/logo.png"}},"image":"https://agent.show.reachrich.ai/assets/og-cover.png","mainEntityOfPage":"https://agent.show.reachrich.ai/insights/llm-assisted-factor-mining.html"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"洞察 Insights","item":"https://agent.show.reachrich.ai/insights/index.html"},{"@type":"ListItem","position":3,"name":"LLM 辅助因子挖掘:从候选生成到严格验证"}]}
+</script>
+<style>
+ :root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+ *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+ .wrap{max-width:780px;margin:0 auto;padding:30px 22px 70px}
+ .crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+ h1{font-size:27px;line-height:1.32;margin:0 0 18px} h2{font-size:20px;margin:32px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:16.5px;margin:22px 0 8px;color:#dfe6ee}
+ p,li{color:#cdd6e0} a{color:var(--acc2)}
+ blockquote{margin:16px 0;padding:10px 16px;border-left:3px solid var(--acc);background:var(--panel);border-radius:0 8px 8px 0;color:#aeb6c2}
+ table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px} th,td{padding:8px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+ code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ ul,ol{padding-left:22px} li{margin:5px 0}
+ .nav{display:flex;gap:14px;flex-wrap:wrap;margin:28px 0 0;font-size:14px}
+ footer{border-top:1px solid var(--line);margin-top:38px;padding-top:16px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/insights/index.html">洞察</a> › LLM 辅助因子挖掘:从候选生成到严格验证</div>
+<h1 id="llm">LLM 辅助因子挖掘:从候选生成到严格验证</h1>
+<blockquote>
+<p>"用 GPT 挖因子"听起来很潮,但 LLM 在量化里的真实价值不是"生成 alpha",而是<strong>加速研究流程</strong>:候选构造、文献综合、代码原型、错误检查。<strong>统计纪律不能被 LLM 替代</strong>。本文讲怎么把 LLM 嵌入因子研究而不被它误导。</p>
+</blockquote>
+<h2 id="llm_1">LLM 能做什么</h2>
+<ul>
+<li><strong>候选构造</strong>:基于领域提示(例如"基于隐含波动率与成交量分歧"),生成多个因子草案;</li>
+<li><strong>文献综合</strong>:把一篇学术论文的因子定义转成可实现的伪代码;</li>
+<li><strong>领域知识注入</strong>:对 A股特有现象(涨跌停、停牌、北向资金、概念炒作)做情境化解释;</li>
+<li><strong>错误检查</strong>:审视回测代码是否有未来函数、信息泄露;</li>
+<li><strong>报告/沟通</strong>:把回测结果整理成可读报告。</li>
+</ul>
+<h2 id="llm_2">LLM 不能做什么(也不应做)</h2>
+<ul>
+<li><strong>判定一个因子"有效"</strong>——这是统计学的事,LLM 不能替你跑 CPCV + DSR;</li>
+<li><strong>生成可直接上线的因子</strong>——LLM 产生的候选必须过 <a href="backtesting-overfitting-cpcv-dsr.html">防过拟合三件套</a>;</li>
+<li><strong>替代领域常识</strong>——A股的微观结构、税费、停牌规则等细节,LLM 经常出错,需人工核对。</li>
+</ul>
+<h2 id="_1">工作流建议</h2>
+<ol>
+<li>LLM 生成 <strong>N 个候选</strong> + 经济直觉解释;</li>
+<li>人工筛掉无意义/数据不可得/与已有因子高度相关的;</li>
+<li>余下候选过<strong>样本外 + DSR + 成本 gate</strong>;</li>
+<li>通过的进入候选池,公开<strong>类型与样本外效果</strong>,不公开公式参数(IP 保护)。</li>
+</ol>
+<p>LLM 是"研究助手",不是"alpha 生成器"。详见 <a href="factor-mining-methodology.html">因子挖掘方法论</a>。</p>
+
+<h2>📖 相关阅读 / Related</h2>
+<ul>
+<li><a href="factor-mining-methodology.html">因子挖掘方法论</a></li>
+<li><a href="backtesting-overfitting-cpcv-dsr.html">防过拟合三件套</a></li>
+<li><a href="https://agent.show.reachrich.ai/glossary/#self-developed">术语:自研 / Factor / Alpha</a></li>
+<li><a href="https://agent.show.reachrich.ai/compare/">vs Qlib / 商业终端</a></li>
+</ul>
+<div class="nav"><a href="/insights/index.html">← 更多洞察</a> · <a href="/">首页</a> · <a href="https://reachrich.ai">reachrich.ai</a></div>
+<footer>本文仅为量化数据研究与方法论科普,不构成投资建议、投资参考、荐股或收益承诺;投资有风险,历史业绩不代表未来。Educational content on quantitative methodology — not investment advice. © 2026 ReachRich</footer>
+</div></body></html>

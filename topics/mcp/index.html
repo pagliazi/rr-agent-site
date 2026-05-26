@@ -1,0 +1,79 @@
+<!doctype html><html lang="zh-CN"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MCP 量化数据 · Model Context Protocol for Quant · RR-Agent</title>
+<meta name="description" content="MCP(Model Context Protocol)主题页:概念、与 REST API 对比、在量化数据场景的应用、Anthropic Claude/Cursor/Cline 等客户端集成、安全与限流。">
+<meta name="keywords" content="MCP,Model Context Protocol,LLM 工具调用,量化数据 MCP,REST vs MCP,Anthropic Claude MCP,量化研究工作流">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://agent.show.reachrich.ai/topics/mcp/">
+<meta property="og:type" content="article"><meta property="og:title" content="MCP 量化数据 · Model Context Protocol for Quant">
+<meta property="og:description" content="MCP(Model Context Protocol)主题页:概念、与 REST API 对比、在量化数据场景的应用、Anthropic Claude/Cursor/Cline 等客户端集成、安全与限流。">
+<meta property="og:url" content="https://agent.show.reachrich.ai/topics/mcp/">
+<meta property="og:image" content="https://agent.show.reachrich.ai/assets/og-cover.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","headline":"MCP 量化数据 · Model Context Protocol for Quant","description":"MCP(Model Context Protocol)主题页:概念、与 REST API 对比、在量化数据场景的应用、Anthropic Claude/Cursor/Cline 等客户端集成、安全与限流。","inLanguage":"zh-CN","datePublished":"2026-05-29","author":{"@type":"Organization","name":"ReachRich"},"mainEntityOfPage":"https://agent.show.reachrich.ai/topics/mcp/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"RR-Agent","item":"https://agent.show.reachrich.ai/"},{"@type":"ListItem","position":2,"name":"Topics","item":"https://agent.show.reachrich.ai/topics/"},{"@type":"ListItem","position":3,"name":"MCP 量化数据 · Model Context Protocol for Quant"}]}
+</script>
+<style>:root{--bg:#0b0e14;--panel:#11161f;--card:#141a24;--line:#222a36;--txt:#e6edf3;--mut:#8b949e;--acc:#3fb950;--acc2:#58a6ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font:15.5px/1.78 -apple-system,"PingFang SC",Inter,system-ui,Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:30px 22px 70px}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:20px} .crumb a{color:var(--acc2);text-decoration:none}
+h1{font-size:28px;margin:0 0 18px} h2{font-size:21px;margin:30px 0 12px;padding-top:8px;border-top:1px solid var(--line)} h3{font-size:17px;margin:22px 0 8px}
+p,li{color:#cdd6e0} a{color:var(--acc2)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px} th,td{padding:9px 11px;border:1px solid var(--line);text-align:left} th{background:var(--panel)}
+code{background:#1c2230;padding:2px 6px;border-radius:5px;font-size:13.5px} pre{background:#0d1117;border:1px solid var(--line);border-radius:9px;padding:14px;overflow:auto} pre code{background:none;padding:0}
+ul,ol{padding-left:22px} li{margin:5px 0}
+footer{border-top:1px solid var(--line);margin-top:32px;padding-top:14px;color:var(--mut);font-size:12px}
+</style></head><body><div class="wrap">
+<div class="crumb"><a href="/">RR-Agent</a> › <a href="/topics/">Topics</a> › MCP 量化数据 · Model Context Protocol for Quant</div>
+<h1 id="mcp-model-context-protocol-for-quantitative-data">🔌 MCP · Model Context Protocol for Quantitative Data</h1>
+<blockquote>
+<p>MCP 是 Anthropic 主推的开放标准(2024 年末发布),让 LLM(Claude/GPT/Qwen)<strong>直接发现并调用一组"工具"</strong>。本主题页汇总 MCP 在量化数据场景的应用与最佳实践。</p>
+</blockquote>
+<h2 id="mcp">什么是 MCP</h2>
+<p>传统接入数据:你写程序、按文档拼 URL、拿 JSON。
+MCP 接入:LLM 在对话中<strong>自动调用</strong> <code>rr_quote(code='600519')</code> 取实时报价;多工具组合("帮我看 600519 的 F10 + 资金流 + 同行业对比")LLM 自己分解、依次调用;用户讲自然语言不写代码。</p>
+<h2 id="mcp-vs-rest-api">MCP vs REST API:不是替代,是分层</h2>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>接入方式</th>
+<th>使用者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>程序化</td>
+<td>HTTP REST</td>
+<td>生产策略 / 自动化</td>
+</tr>
+<tr>
+<td>对话式</td>
+<td>MCP</td>
+<td>研究员 / LLM agent</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://reachrich.ai">ReachRich</a> 同时提供两层 — HTTP API token 鉴权 + MCP 挂到 Claude/Cursor/Cline。</p>
+<h2 id="mcp_1">MCP 在量化场景的价值</h2>
+<ul>
+<li><strong>研究员探索</strong>:对话式取数,降低非程序员门槛</li>
+<li><strong>AI agent 工作流</strong>:多 MCP 工具组合(数据 + 可视化 + 交易)</li>
+<li><strong>可重用工具链</strong>:写一次 MCP server,被所有 LLM 客户端调用</li>
+</ul>
+<h2 id="_1">安全与限流</h2>
+<p>MCP 不解除任何鉴权/限流需求:
+- 每个 MCP 工具需要 token + 配额
+- 敏感工具(交易、删数据)需要二次确认
+- 审计每次 LLM 调用,防滥用</p>
+<h2 id="_2">完整阅读</h2>
+<ul>
+<li>🔌 <a href="/insights/api-vs-mcp-quant-data.html">API vs MCP 接入对比(中文)</a></li>
+<li>🌐 <a href="/insights/mcp-vs-rest-quant-data-en.html">API vs MCP: Two Paradigms (English)</a></li>
+<li>📚 <a href="/glossary/#mcp">术语:MCP / REST / 数据契约</a></li>
+<li>🔗 <a href="https://modelcontextprotocol.io">Model Context Protocol 官方文档</a></li>
+</ul>
+<footer>本主题页持续更新。© 2026 ReachRich · <a href="https://reachrich.ai">reachrich.ai</a></footer>
+</div></body></html>
